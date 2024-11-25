@@ -22,10 +22,10 @@ UILLMVStateMachineComponent::UILLMVStateMachineComponent(const FObjectInitialize
 
 void UILLMVStateMachineComponent::SetCurrentState(EILLMVEntityState State)
 {
-	// Assuming that state can change always and only depends on the current state
 	bool canChangeState = true;
 	if (IsValid(m_currentState))
 	{
+		// Ensure current state allows to change state
 		canChangeState = m_currentState->CanChangeToState();
 	}
 
@@ -34,12 +34,15 @@ void UILLMVStateMachineComponent::SetCurrentState(EILLMVEntityState State)
 		TObjectPtr<UILLMVState>* targetState = States.Find(State);
 		if (targetState != nullptr)
 		{
+			// if already in a state, then exit from it
             if (IsValid(m_currentState))
             {
 				m_currentState->ExistState();
 			}
+			// Cache current state
 			m_currentStateType = State;
 			m_currentState = *targetState;
+			// notify state that has entered
 			m_currentState->EnterState();
 		}
 	}

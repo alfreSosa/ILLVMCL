@@ -29,10 +29,11 @@ public:
 
 public:
 #pragma region UILLMVState
-
+	
+	/** Overridden to notify normal state and recover simulation system reference to get access to the grid*/
 	virtual void EnterState() override;
 	
-	/** Overridden to move along the path*/
+	/** Overridden to move the entity an amount of grids to the target'sclosest grid. if target reached, transtionate to attack*/
 	virtual void UpdateState() override;
 #pragma endregion
 private:
@@ -41,7 +42,7 @@ private:
 	bool HasReachedTarget() const;
 
 private:
-
+	//! Cached reference to simulation system to get access to the grid
     UPROPERTY(Transient)
 	UILLMVSimulationSubsystem* m_simulationSubsystem = nullptr;
 };

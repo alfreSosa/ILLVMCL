@@ -27,16 +27,31 @@ public:
     */
     virtual void Initialize(AILLMVEntity* Owner);
 
+    /**
+    *	UILLMVState::EnterState - virtual public 
+    *   @brief - This method is called everytime a state is activated
+    *	@return void
+    */
     virtual void EnterState() { }
 
+    /**
+    *	UILLMVState::EnterState - virtual public
+    *   @brief - This method is called everytime exit from the state
+    *	@return void
+    */
     virtual void ExistState() { }
     /**
     *	UILLMVState::UpdateState - virtual public 
-    *   @brief - Here subclasses must implement custom logic.
+    *   @brief - Called every simulation step. Here subclasses must implement custom logic.
     *	@return void
     */
     virtual void UpdateState() { }
 
+    /**
+    *	UILLMVState::CanChangeToState - virtual public
+        @brief - This method is called everytime a state change is requested to the state machine.
+    *	@return bool
+    */
     virtual bool CanChangeToState() { return true; }
     
     /**

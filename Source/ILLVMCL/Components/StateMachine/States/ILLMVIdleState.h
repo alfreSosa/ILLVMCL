@@ -16,7 +16,10 @@ class ILLVMCL_API UILLMVIdleState : public UILLMVState
 
 public:
 #pragma region UILLMVState
+    /** Overridden to notify owner that should retunr to normal state*/
     virtual void EnterState() override;
+
+    /** Overridden to transtitionate to moving state after owner has a target*/
     virtual void UpdateState() override;
 #pragma endregion 
 };

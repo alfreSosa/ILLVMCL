@@ -7,7 +7,8 @@
 #include "ILLMVDeadState.generated.h"
 
 /**
- * 
+ * Representation of dead state of an entity
+ * Force to no transition to another state
  */
 UCLASS()
 class ILLVMCL_API UILLMVDeadState : public UILLMVState
@@ -16,8 +17,12 @@ class ILLVMCL_API UILLMVDeadState : public UILLMVState
 
 public:
 #pragma region UILLMVState
+    
+    /** Overridden to notify owner actor the dead state*/
+    virtual void EnterState() override; 
 
-    virtual void EnterState() override;
+    /** Overridden to force not change state*/
+    virtual bool CanChangeToState() override { return false;};
 
 #pragma endregion
 };
