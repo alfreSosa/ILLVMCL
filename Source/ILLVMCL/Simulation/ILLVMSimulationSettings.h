@@ -19,8 +19,14 @@ public:
 	UPROPERTY(Config, EditDefaultsOnly, Category = "ILLVM")
 	TSubclassOf<AILLMVEntity> TeamAEntity = nullptr;
 
+    UPROPERTY(Config, EditDefaultsOnly, meta = (ClampMin = 1), Category = "ILLVM")
+	int32 TeamANumber = 1;
+
     UPROPERTY(Config, EditDefaultsOnly, Category = "ILLVM")
     TSubclassOf<AILLMVEntity> TeamBEntity = nullptr;
+    
+	UPROPERTY(Config, EditDefaultsOnly, meta = (ClampMin = 1), Category = "ILLVM")
+    int32 TeamBNumber = 1;
 
     UPROPERTY(Config, EditDefaultsOnly, meta = (ClampMin = 0.1f), Category = "ILLVM")
 	float SimulationTimeStep = 0.1f;

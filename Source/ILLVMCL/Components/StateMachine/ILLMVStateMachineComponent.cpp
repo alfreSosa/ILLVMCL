@@ -38,6 +38,7 @@ void UILLMVStateMachineComponent::SetCurrentState(EILLMVEntityState State)
             {
 				m_currentState->ExistState();
 			}
+			m_currentStateType = State;
 			m_currentState = *targetState;
 			m_currentState->EnterState();
 		}

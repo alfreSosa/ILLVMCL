@@ -6,6 +6,7 @@
 #include "Engine/World.h"
 #include "Actors/Grid/ILLVMGrid.h"
 #include "Simulation/ILLMVSimulationSubsystem.h"
+#include "Components/ILLMVHealthComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 ///
@@ -19,6 +20,7 @@ AILLMVEntity::AILLMVEntity(const FObjectInitializer& ObjectInitializer) :
     PrimaryActorTick.bStartWithTickEnabled = false;
 
     StateMachine = CreateDefaultSubobject<UILLMVStateMachineComponent>(TEXT("StateMachine"));
+    Health = CreateDefaultSubobject<UILLMVHealthComponent>(TEXT("Health"));
 
 }
 
@@ -53,9 +55,28 @@ void AILLMVEntity::SetCurrentGridLocation(const FVector2D& GridLocation)
 ///
 //////////////////////////////////////////////////////////////////////////
 
-void AILLMVEntity::SetMovementDestiny(const FVector2D& Destiny)
+void AILLMVEntity::SetTarget(AILLMVEntity* Target)
 {
-    m_destiny.Reset();
-    m_destiny = Destiny;
+    if (m_target != nullptr && m_target != Target)
+    {
+        m_target->GetHealthComponent()->OnDeadDelegate.RemoveDynamic(this, &AILLMVEntity::OnTargetEntityDead);
+    }
+    m_target = Target;
+    m_target->GetHealthComponent()->OnDeadDelegate.AddDynamic(this, &AILLMVEntity::OnTargetEntityDead);
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+void AILLMVEntity::OnTargetEntityDead()
+{
+    if (m_target != nullptr)
+    {
+        m_target->GetHealthComponent()->OnDeadDelegate.RemoveDynamic(this, &AILLMVEntity::OnTargetEntityDead);
+    }
+    m_target = nullptr;
+    // Return to idle after losing the target
+    GetStateMachine()->SetCurrentState(EILLMVEntityState::EIdle);
 }
 

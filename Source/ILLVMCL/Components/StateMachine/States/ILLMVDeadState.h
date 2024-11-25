@@ -4,19 +4,20 @@
 
 #include "CoreMinimal.h"
 #include "Components/StateMachine/States/ILLMVState.h"
-#include "ILLMVIdleState.generated.h"
+#include "ILLMVDeadState.generated.h"
 
 /**
- * Just a state where the entity should be doing nothing
+ * 
  */
 UCLASS()
-class ILLVMCL_API UILLMVIdleState : public UILLMVState
+class ILLVMCL_API UILLMVDeadState : public UILLMVState
 {
 	GENERATED_BODY()
 
 public:
 #pragma region UILLMVState
+
     virtual void EnterState() override;
-    virtual void UpdateState() override;
-#pragma endregion 
+
+#pragma endregion
 };

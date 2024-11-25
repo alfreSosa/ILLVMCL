@@ -9,9 +9,19 @@
 ///
 //////////////////////////////////////////////////////////////////////////
 
+void UILLMVIdleState::EnterState()
+{
+    // Notify return to normal state
+    GetOwner()->OnNormalState();
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
 void UILLMVIdleState::UpdateState()
 {
-    if (GetOwner()->HasDestiny())
+    if (GetOwner()->GetTarget() != nullptr)
     {
         GetOwner()->GetStateMachine()->SetCurrentState(EILLMVEntityState::EMovingToTarget);
     }

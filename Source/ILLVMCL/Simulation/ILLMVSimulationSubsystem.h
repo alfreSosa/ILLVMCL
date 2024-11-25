@@ -21,17 +21,19 @@ public:
 	
 	void InitializeSimulation(AILLVMGrid* Grid);
 
-	void SpawnEntitiesTeamA(int32 NumberOfEntities = 1);
-
-    void SpawnEntitiesTeamB(int32 NumberOfEntities = 1);
-
-	void StartSimulation();
-
 	const AILLVMGrid* GetCurrentGrid() const { return m_currentWorldGrid;}
 
-	UFUNCTION()
-	void SimulationStep();
+private:
+    void SpawnEntitiesForTeam(TSubclassOf<AILLMVEntity> Type, int32 NumberOfEntities, TArray<AILLMVEntity*>& TeamCollection);
 
+    void SelectEntitiesTargets();
+
+    void SelectTargets(const TArray<AILLMVEntity*>& Attackers, const TArray<AILLMVEntity*>& Defenders);
+
+    void StartSimulation();
+
+    UFUNCTION()
+    void SimulationStep();
 private:
 
 	UPROPERTY(Transient)

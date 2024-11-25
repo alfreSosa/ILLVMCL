@@ -8,6 +8,7 @@
 
 // Forward declarations
 class UILLMVStateMachineComponent;
+class UILLMVHealthComponent;
 
 /** 
 *	Base class for entities that will be placed in the simulation
@@ -25,27 +26,47 @@ public:
 
 	void UpdateSimulation();
 
-	TObjectPtr<UILLMVStateMachineComponent> GetStateMachine() { return StateMachine;}
+    TObjectPtr<UILLMVStateMachineComponent> GetStateMachine() { return StateMachine; }
+    TObjectPtr<UILLMVHealthComponent> GetHealthComponent() { return Health; }
 
     const FVector2D& GetCurrentGridLocation() { return m_currentGridLocation; }
     
 	void SetCurrentGridLocation(const FVector2D& GridLocation);
 
-    void SetMovementDestiny(const FVector2D& Destiny);
+    void SetTarget(AILLMVEntity* Target);
 
-    bool HasDestiny() const { return m_destiny.IsSet(); }
+	AILLMVEntity* GetTarget() const { return m_target; }
 
-    FVector2D GetDestiny() const { return *m_destiny; }
+    UFUNCTION(BlueprintImplementableEvent, Category = "ILLMV|Enitity")
+    void OnNormalState();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "ILLMV|Enitity")
+    void OnAttackState();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "ILLMV|Enitity")
+    void OnReceiveHit();
+
+    UFUNCTION(BlueprintImplementableEvent, Category = "ILLMV|Enitity")
+    void OnDeadState();
 
 #pragma endregion
+protected:
+    UFUNCTION()
+    void OnTargetEntityDead();
+
 protected:
 	//! Reference to state machine component which manage the entity state
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ILLMV|Enitity")
 	TObjectPtr<UILLMVStateMachineComponent> StateMachine = nullptr;
 
+    //! Reference to state machine component which manage the entity state
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ILLMV|Enitity")
+    TObjectPtr<UILLMVHealthComponent> Health = nullptr;
+
 private:
 
-    TOptional<FVector2D> m_destiny;
+    UPROPERTY(Transient)
+	AILLMVEntity* m_target = nullptr;
 	
 	// Cached location of the entity in the grid
 	FVector2D m_currentGridLocation = FVector2D::ZeroVector;

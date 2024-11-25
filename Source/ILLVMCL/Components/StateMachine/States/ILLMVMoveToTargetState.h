@@ -35,19 +35,12 @@ public:
 	/** Overridden to move along the path*/
 	virtual void UpdateState() override;
 #pragma endregion
-	
-	/** Method to receive a target to pursuit*/
-	void SetCurrentTarget(AILLMVEntity* Target);
 private:
 
 	/** Internal method to check conditions about pursuit the target*/
 	bool HasReachedTarget() const;
 
 private:
-
-	//! Reference to possible target to pursuit
-	UPROPERTY(Transient)
-	AILLMVEntity* m_currentTarget = nullptr;
 
     UPROPERTY(Transient)
 	UILLMVSimulationSubsystem* m_simulationSubsystem = nullptr;

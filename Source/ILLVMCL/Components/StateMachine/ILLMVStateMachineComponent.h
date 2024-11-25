@@ -67,6 +67,8 @@ public:
 	*/
 	UILLMVState* GetState(EILLMVEntityState State);
 
+	FORCEINLINE EILLMVEntityState GetCurrentState() const { return m_currentStateType;}
+
 #pragma endregion
 
 protected:
@@ -76,6 +78,8 @@ protected:
 #pragma endregion
 
 private:
+	UPROPERTY(Transient)
+	EILLMVEntityState m_currentStateType = EILLMVEntityState::EMovingToTarget;
 	//! Chached reference of the active state
 	UPROPERTY(Transient)
 	UILLMVState* m_currentState = nullptr;
