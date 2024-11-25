@@ -23,12 +23,17 @@ public:
 
 	const AILLVMGrid* GetCurrentGrid() const { return m_currentWorldGrid;}
 
+    AILLMVEntity* RequestNewTarget(AILLMVEntity* Entity) const;
+
 private:
+
     void SpawnEntitiesForTeam(TSubclassOf<AILLMVEntity> Type, int32 NumberOfEntities, TArray<AILLMVEntity*>& TeamCollection);
 
     void SelectEntitiesTargets();
 
     void SelectTargets(const TArray<AILLMVEntity*>& Attackers, const TArray<AILLMVEntity*>& Defenders);
+    
+    AILLMVEntity* SelectTargetForEntity(AILLMVEntity* Entity, const TArray<AILLMVEntity*>& Defenders) const;
 
     void StartSimulation();
 

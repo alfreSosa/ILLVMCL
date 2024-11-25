@@ -9,6 +9,7 @@
 // Forward declarations
 class UILLMVStateMachineComponent;
 class UILLMVHealthComponent;
+class URealTimeMovementComponent;
 
 /** 
 *	Base class for entities that will be placed in the simulation
@@ -28,10 +29,11 @@ public:
 
     TObjectPtr<UILLMVStateMachineComponent> GetStateMachine() { return StateMachine; }
     TObjectPtr<UILLMVHealthComponent> GetHealthComponent() { return Health; }
+    TObjectPtr<URealTimeMovementComponent> GetMovementComponent() { return Movement; }
 
     const FVector2D& GetCurrentGridLocation() { return m_currentGridLocation; }
     
-	void SetCurrentGridLocation(const FVector2D& GridLocation);
+	void SetCurrentGridLocation(const FVector2D& GridLocation, bool Teleport = false);
 
     void SetTarget(AILLMVEntity* Target);
 
@@ -59,9 +61,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ILLMV|Enitity")
 	TObjectPtr<UILLMVStateMachineComponent> StateMachine = nullptr;
 
-    //! Reference to state machine component which manage the entity state
     UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ILLMV|Enitity")
     TObjectPtr<UILLMVHealthComponent> Health = nullptr;
+
+    UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ILLMV|Enitity")
+    TObjectPtr<URealTimeMovementComponent> Movement = nullptr;
 
 private:
 

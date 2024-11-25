@@ -7,6 +7,7 @@
 #include "Engine/World.h"
 #include "Actors/Entities/ILLMVEntity.h"
 #include "TimerManager.h"
+#include "Components/StateMachine/ILLMVStateMachineComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 ///
@@ -27,6 +28,20 @@ void UILLMVSimulationSubsystem::InitializeSimulation(AILLVMGrid* Grid)
 ///
 //////////////////////////////////////////////////////////////////////////
 
+AILLMVEntity* UILLMVSimulationSubsystem::RequestNewTarget(AILLMVEntity* Entity) const
+{
+    if (m_teamA.Contains(Entity))
+    {
+        return SelectTargetForEntity(Entity, m_teamB);
+    }
+    // assume is team b
+    return SelectTargetForEntity(Entity, m_teamA);
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
 void UILLMVSimulationSubsystem::SpawnEntitiesForTeam(TSubclassOf<AILLMVEntity> Type, int32 NumberOfEntities, TArray<AILLMVEntity*>& TeamCollection)
 {
     for (int32 i = 0; i < NumberOfEntities; ++i)
@@ -35,7 +50,7 @@ void UILLMVSimulationSubsystem::SpawnEntitiesForTeam(TSubclassOf<AILLMVEntity> T
         AILLMVEntity* entity = GetWorld()->SpawnActor<AILLMVEntity>(Type);
         if (entity != nullptr)
         {
-            entity->SetCurrentGridLocation(gridLocation);
+            entity->SetCurrentGridLocation(gridLocation, true);
             TeamCollection.AddUnique(entity);
             m_allEntities.AddUnique(entity);
         }
@@ -60,10 +75,22 @@ void UILLMVSimulationSubsystem::SelectTargets(const TArray<AILLMVEntity*>& Attac
 {
     for (int32 i = 0; i < Attackers.Num(); ++i)
     {
-        FVector2D location = Attackers[i]->GetCurrentGridLocation();
-        AILLMVEntity* targetEntity = nullptr;
-        int32 maxDistance = MAX_int32;
-        for (int32 j = 0; j < Defenders.Num(); ++j)
+        Attackers[i]->SetTarget(SelectTargetForEntity(Attackers[i], Defenders));
+    }
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+AILLMVEntity* UILLMVSimulationSubsystem::SelectTargetForEntity(AILLMVEntity* Entity, const TArray<AILLMVEntity*>& Defenders) const
+{
+    FVector2D location = Entity->GetCurrentGridLocation();
+    AILLMVEntity* targetEntity = nullptr;
+    int32 maxDistance = MAX_int32;
+    for (int32 j = 0; j < Defenders.Num(); ++j)
+    {
+        if (Defenders[j]->GetStateMachine()->GetCurrentState() != EILLMVEntityState::EDead)
         {
             int32 distance = (Defenders[j]->GetCurrentGridLocation() - location).SizeSquared();
             if (distance < maxDistance)
@@ -72,8 +99,8 @@ void UILLMVSimulationSubsystem::SelectTargets(const TArray<AILLMVEntity*>& Attac
                 targetEntity = Defenders[j];
             }
         }
-        Attackers[i]->SetTarget(targetEntity);
     }
+    return targetEntity;
 }
 
 //////////////////////////////////////////////////////////////////////////

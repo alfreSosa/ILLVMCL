@@ -7,6 +7,7 @@
 #include "Actors/Grid/ILLVMGrid.h"
 #include "Simulation/ILLMVSimulationSubsystem.h"
 #include "Components/ILLMVHealthComponent.h"
+#include "Components/RealTimeMovementComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 ///
@@ -21,6 +22,7 @@ AILLMVEntity::AILLMVEntity(const FObjectInitializer& ObjectInitializer) :
 
     StateMachine = CreateDefaultSubobject<UILLMVStateMachineComponent>(TEXT("StateMachine"));
     Health = CreateDefaultSubobject<UILLMVHealthComponent>(TEXT("Health"));
+    Movement = CreateDefaultSubobject<URealTimeMovementComponent>(TEXT("Movement"));
 
 }
 
@@ -37,7 +39,7 @@ void AILLMVEntity::UpdateSimulation()
 ///
 //////////////////////////////////////////////////////////////////////////
 
-void AILLMVEntity::SetCurrentGridLocation(const FVector2D& GridLocation)
+void AILLMVEntity::SetCurrentGridLocation(const FVector2D& GridLocation, bool Teleport /*= false*/)
 {
     m_currentGridLocation = GridLocation;
     UILLMVSimulationSubsystem* simulationSubsystem = GetWorld()->GetSubsystem<UILLMVSimulationSubsystem>();
@@ -46,7 +48,12 @@ void AILLMVEntity::SetCurrentGridLocation(const FVector2D& GridLocation)
         const AILLVMGrid* grid = simulationSubsystem->GetCurrentGrid();
         if (grid != nullptr)
         {
-            SetActorLocation(grid->GetGridWorldLocation(m_currentGridLocation));
+            FVector worldLocation = grid->GetGridWorldLocation(m_currentGridLocation);
+            if (Teleport)
+            {
+                SetActorLocation(worldLocation);
+            }
+            Movement->SetTargetLocation(worldLocation);
         }
     }
 }
@@ -76,6 +83,7 @@ void AILLMVEntity::OnTargetEntityDead()
         m_target->GetHealthComponent()->OnDeadDelegate.RemoveDynamic(this, &AILLMVEntity::OnTargetEntityDead);
     }
     m_target = nullptr;
+
     // Return to idle after losing the target
     GetStateMachine()->SetCurrentState(EILLMVEntityState::EIdle);
 }

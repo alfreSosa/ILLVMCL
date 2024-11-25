@@ -11,8 +11,12 @@
 
 void UILLMVHealthComponent::ApplyDamage(int32 DamageAmount)
 {
-	m_currentHealth = FMath::Max(m_currentHealth - DamageAmount, 0);
-	m_ownerRef->GetStateMachine()->SetCurrentState(EILLMVEntityState::EReceiveHit);
+	if (m_currentHealth > 0)
+	{
+		m_currentHealth = FMath::Max(m_currentHealth - DamageAmount, 0);
+		m_ownerRef->GetStateMachine()->SetCurrentState(EILLMVEntityState::EReceiveHit);
+	}
+	
 	if (m_currentHealth <= 0)
 	{
         OnDeadDelegate.Broadcast();
