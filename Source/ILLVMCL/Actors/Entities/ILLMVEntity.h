@@ -24,11 +24,20 @@ public:
 #pragma region AILLMVEntity
 
 	void UpdateSimulation();
-#pragma endregion
-	
-    const FVector2D& GetCurrentGridLocation() { return m_currentGridLocation; }
-    void SetCurrentGridLocation(const FVector2D& GridLocation);
 
+	TObjectPtr<UILLMVStateMachineComponent> GetStateMachine() { return StateMachine;}
+
+    const FVector2D& GetCurrentGridLocation() { return m_currentGridLocation; }
+    
+	void SetCurrentGridLocation(const FVector2D& GridLocation);
+
+    void SetMovementDestiny(const FVector2D& Destiny);
+
+    bool HasDestiny() const { return m_destiny.IsSet(); }
+
+    FVector2D GetDestiny() const { return *m_destiny; }
+
+#pragma endregion
 protected:
 	//! Reference to state machine component which manage the entity state
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "ILLMV|Enitity")
@@ -36,6 +45,8 @@ protected:
 
 private:
 
+    TOptional<FVector2D> m_destiny;
+	
 	// Cached location of the entity in the grid
 	FVector2D m_currentGridLocation = FVector2D::ZeroVector;
 

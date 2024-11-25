@@ -8,6 +8,7 @@
 
 // Forward declarations
 class AAILLMVEntity;
+class UILLMVSimulationSubsystem;
 
 /**
  *  State of an entity in which is following a path or pursuing a target
@@ -28,6 +29,8 @@ public:
 
 public:
 #pragma region UILLMVState
+
+	virtual void EnterState() override;
 	
 	/** Overridden to move along the path*/
 	virtual void UpdateState() override;
@@ -41,14 +44,11 @@ private:
 	bool HasReachedTarget() const;
 
 private:
-	
-	//! Current path location
-	int32 m_pathIdx = 0;
-
-	//! Received path to follow
-	TArray<FVector2D> m_currentPath;
 
 	//! Reference to possible target to pursuit
 	UPROPERTY(Transient)
 	AILLMVEntity* m_currentTarget = nullptr;
+
+    UPROPERTY(Transient)
+	UILLMVSimulationSubsystem* m_simulationSubsystem = nullptr;
 };

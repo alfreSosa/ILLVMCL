@@ -13,5 +13,9 @@ UCLASS()
 class ILLVMCL_API UILLMVIdleState : public UILLMVState
 {
 	GENERATED_BODY()
-	
+
+public:
+#pragma region UILLMVState
+    virtual void UpdateState() override;
+#pragma endregion 
 };

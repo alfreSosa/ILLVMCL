@@ -27,6 +27,9 @@ public:
 
     /** Overridden to draw debug grid with squares*/
     virtual void DrawDebugGrid() override;
+
+    virtual TArray<FVector2D> GetPointNeighbours(const FVector2D& Origin) const override;
+    virtual FVector2D GetClosestNeighbourToPoint(const FVector2D& Origin, const FVector2D& Destiny) const override;
 #pragma endregion
 
 };

@@ -45,3 +45,87 @@ void AILLMVSquareGrid::DrawDebugGrid()
         }
     }
 }
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+TArray<FVector2D> AILLMVSquareGrid::GetPointNeighbours(const FVector2D& Origin) const
+{
+    TArray<FVector2D> neighbours;
+ 
+    // East
+    if ((Origin.X + 1) < Columns)
+    {
+        neighbours.Add(FVector2D(Origin.X + 1, Origin.Y));
+    }
+
+    // NorthEast
+    if ((Origin.X + 1) < Columns && (Origin.Y - 1) >= 0)
+    {
+        neighbours.Add(FVector2D(Origin.X + 1, Origin.Y - 1));
+    }
+
+    // SouthEast
+    if ((Origin.X + 1) < Columns && (Origin.Y + 1) < Rows)
+    {
+        neighbours.Add(FVector2D(Origin.X + 1, Origin.Y + 1));
+    }
+
+    // West
+    if ((Origin.X - 1) >= 0)
+    {
+        neighbours.Add(FVector2D(Origin.X - 1, Origin.Y));
+    }
+
+    // NorthWest
+    if ((Origin.X - 1) >= 0 && (Origin.Y - 1) >= 0)
+    {
+        neighbours.Add(FVector2D(Origin.X - 1, Origin.Y - 1));
+    }
+
+    // SouthWest
+    if ((Origin.X - 1) >= 0 && (Origin.Y + 1) < Rows)
+    {
+        neighbours.Add(FVector2D(Origin.X - 1, Origin.Y + 1));
+    }
+
+    // North
+    if ((Origin.Y - 1) >= 0)
+    {
+        neighbours.Add(FVector2D(Origin.X, Origin.Y - 1));
+    }
+
+    // South
+    if ((Origin.Y + 1) < Rows)
+    {
+        neighbours.Add(FVector2D(Origin.X, Origin.Y + 1));
+    }
+
+    return neighbours;
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+FVector2D AILLMVSquareGrid::GetClosestNeighbourToPoint(const FVector2D& Origin, const FVector2D& Destiny) const
+{
+    TArray<FVector2D> neighbours = GetPointNeighbours(Origin);
+    int32 maxDistance = 1000000;
+    int32 closestIdx = -1;
+    for (int32 i = 0; i < neighbours.Num(); ++i)
+    {
+        int32 distance = (Destiny - neighbours[i]).SizeSquared();
+        if (distance < maxDistance)
+        {
+            closestIdx = i;
+            maxDistance = distance;
+        }
+    }
+    if (closestIdx >= 0)
+    {
+        return neighbours[closestIdx];
+    }
+    return FVector2D();
+}

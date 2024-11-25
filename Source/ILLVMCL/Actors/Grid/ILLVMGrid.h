@@ -19,6 +19,7 @@ public:
 
 	UPROPERTY()
 	FVector WorldLocation;
+	
 };
 
 /**
@@ -90,6 +91,9 @@ public:
 
 	const FVector& GetGridWorldLocation(const FVector2D& GridLocation) const;
 
+    virtual TArray<FVector2D> GetPointNeighbours(const FVector2D& Origin) const { return TArray<FVector2D>(); }
+    virtual FVector2D GetClosestNeighbourToPoint(const FVector2D& Origin, const FVector2D& Destiny)  const { return FVector2D(); }
+
 protected:
 #pragma region AActor
 
@@ -97,9 +101,11 @@ protected:
     virtual void BeginPlay() override;
 
 #pragma endregion
+
 protected:
 
 	/** Grid representation. Assumming bidimensional grid*/
 	UPROPERTY()
 	TArray<FUILLVMTilesColumn> m_Grid;
+
 };

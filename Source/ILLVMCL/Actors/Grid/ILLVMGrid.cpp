@@ -59,4 +59,3 @@ void AILLVMGrid::BeginPlay()
 		simulationSubsystem->InitializeSimulation(this);
 	}
 }
-

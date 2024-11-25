@@ -27,9 +27,12 @@ public:
     */
     virtual void Initialize(AILLMVEntity* Owner);
 
+    virtual void EnterState() { }
+
+    virtual void ExistState() { }
     /**
     *	UILLMVState::UpdateState - virtual public 
-    *   @brief - Here subsclasses must implement custom logic.
+    *   @brief - Here subclasses must implement custom logic.
     *	@return void
     */
     virtual void UpdateState() { }

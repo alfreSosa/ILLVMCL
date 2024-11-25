@@ -49,3 +49,13 @@ void AILLMVEntity::SetCurrentGridLocation(const FVector2D& GridLocation)
     }
 }
 
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+void AILLMVEntity::SetMovementDestiny(const FVector2D& Destiny)
+{
+    m_destiny.Reset();
+    m_destiny = Destiny;
+}
+

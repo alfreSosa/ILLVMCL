@@ -26,7 +26,7 @@ void UILLMVStateMachineComponent::SetCurrentState(EILLMVEntityState State)
 	bool canChangeState = true;
 	if (IsValid(m_currentState))
 	{
-	
+		canChangeState = m_currentState->CanChangeToState();
 	}
 
 	if (canChangeState)
@@ -34,7 +34,12 @@ void UILLMVStateMachineComponent::SetCurrentState(EILLMVEntityState State)
 		TObjectPtr<UILLMVState>* targetState = States.Find(State);
 		if (targetState != nullptr)
 		{
+            if (IsValid(m_currentState))
+            {
+				m_currentState->ExistState();
+			}
 			m_currentState = *targetState;
+			m_currentState->EnterState();
 		}
 	}
 }

@@ -28,6 +28,10 @@ public:
 	void StartSimulation();
 
 	const AILLVMGrid* GetCurrentGrid() const { return m_currentWorldGrid;}
+
+	UFUNCTION()
+	void SimulationStep();
+
 private:
 
 	UPROPERTY(Transient)
@@ -38,4 +42,10 @@ private:
 
     UPROPERTY(Transient)
     TArray<AILLMVEntity*> m_teamB;
+
+    UPROPERTY(Transient)
+    TArray<AILLMVEntity*> m_allEntities;
+
+    UPROPERTY(Transient)
+	FTimerHandle m_simulationStepTimer;
 };
