@@ -27,7 +27,7 @@ public:
 #pragma endregion
 	
     const FVector2D& GetCurrentGridLocation() { return m_currentGridLocation; }
-    void SetCurrentGridLocation(const FVector2D& GridLocation) { m_currentGridLocation = GridLocation; }
+    void SetCurrentGridLocation(const FVector2D& GridLocation);
 
 protected:
 	//! Reference to state machine component which manage the entity state

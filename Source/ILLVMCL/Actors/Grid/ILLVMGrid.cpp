@@ -2,6 +2,8 @@
 
 
 #include "Actors/Grid/ILLVMGrid.h"
+#include "Simulation/ILLMVSimulationSubsystem.h"
+#include "Engine/World.h"
 
 //////////////////////////////////////////////////////////////////////////
 ///
@@ -24,5 +26,37 @@ void AILLVMGrid::OnConstruction(const FTransform& Transform)
 {
 	Super::OnConstruction(Transform);
 	GenerateGrid();
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+FVector2D AILLVMGrid::GetGridRandomLocation() const
+{
+	return FVector2D(FMath::RandRange(0, Columns - 1), FMath::RandRange(0, Rows - 1));
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+const FVector& AILLVMGrid::GetGridWorldLocation(const FVector2D& GridLocation) const
+{
+	return GetGrid()[GridLocation.X].TilesRow[GridLocation.Y].WorldLocation;
+}
+
+//////////////////////////////////////////////////////////////////////////
+///
+//////////////////////////////////////////////////////////////////////////
+
+void AILLVMGrid::BeginPlay()
+{
+	Super::BeginPlay();
+	UILLMVSimulationSubsystem* simulationSubsystem = GetWorld()->GetSubsystem<UILLMVSimulationSubsystem>();
+	if (simulationSubsystem != nullptr)
+	{
+		simulationSubsystem->InitializeSimulation(this);
+	}
 }
 

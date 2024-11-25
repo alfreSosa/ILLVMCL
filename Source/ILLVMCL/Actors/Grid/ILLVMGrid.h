@@ -86,6 +86,17 @@ public:
 	*/
 	virtual void DrawDebugGrid() { }
 
+	FVector2D GetGridRandomLocation() const;
+
+	const FVector& GetGridWorldLocation(const FVector2D& GridLocation) const;
+
+protected:
+#pragma region AActor
+
+    /** Overridden to register grid in the simulation subsystem*/
+    virtual void BeginPlay() override;
+
+#pragma endregion
 protected:
 
 	/** Grid representation. Assumming bidimensional grid*/
